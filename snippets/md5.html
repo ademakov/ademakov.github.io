@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1"/>
+  <meta name="author" content="Aleksey Demakov"/>
+  <title>MD5</title>
+  <link rel="stylesheet" href="/style.css" type="text/css">
+  <!--[if lt IE 7]>
+    <link rel="stylesheet" href="/ie6.css" type="text/css">
+  <![endif]-->
+</head>
+<body>
+
+<div id="header">
+  <p>&nbsp;</p>
+</div> <!-- header -->
+
+<div id="wrapper">
+
+<div id="sidebar">
+  <div id="menu">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="http://blog.activationrecord.net/">Blog</a></li>
+      <li><a href="/projects">Projects</a>
+        <ul>
+	  <li><a href="/projects/index.html#libjit">libjit</a></li>
+	</ul>
+      </li>
+      <li><a href="/snippets">Snippets</a>
+        <ul>
+	  <li><a href="/snippets/aatree.html">AA-Tree</a></li>
+	</ul>
+        <ul>
+	  <li><a href="/snippets/md5.html">MD5</a></li>
+	</ul>
+      </li>
+      <li><a href="/links.html">Links</a></li>
+    </ul>
+  </div>
+</div> <!-- sidebar -->
+
+<div id="content">
+
+<div id="title">
+  <h1>MD5</h1>
+</div>
+
+<p>This is a C++ implementation of the MD5 Message-Disgest algorithm.
+It is derived from the RSA Data Security, Inc. MD5 Message-Digest
+Algorithm (<a href="http://www.ietf.org/rfc/rfc1321.txt">RFC 1321</a>).
+</p>
+
+<p>There is a zillion of other MD5 implementations out there.
+I wrote this one because those that I was able to find quickly
+on the Net were using an array of two 32-bit values to represent
+a 64 bit value. Although this is exactly what the original
+<a href="http://www.ietf.org/rfc/rfc1321.txt">RFC</a>
+implementation does I thought that nowdays when the 64-bit
+support is widely available this makes much less sense than in 1992.</p>
+
+<p>So the caveat is this implementation dependes on the
+int64_t availability.</p>
+
+<p>
+<a href="md5.h">md5.h</a> - C++ header file
+<br/>
+<a href="md5.cc">md5.cc</a> - C++ source file
+</p>
+
+</div> <!-- content -->
+
+</div> <!-- wrapper -->
+
+<div id="footer">
+  <p>Copyright &copy; 2007 Aleksey Demakov | <a href="mailto:ademakov@gmail.com">Contact me</a></p>
+</div> <!-- footer -->
+
+</body>
+</html>

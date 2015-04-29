@@ -1,0 +1,306 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1"/>
+  <meta name="author" content="Aleksey Demakov"/>
+  <title>Balanced Search Trees Made Simple (In C#)</title>
+  <link rel="stylesheet" href="/style.css" type="text/css">
+  <!--[if lt IE 7]>
+    <link rel="stylesheet" href="/ie6.css" type="text/css">
+  <![endif]-->
+  <style type="text/css">
+.csharpcode, .csharpcode pre
+{
+	font-size: small;
+	color: black;
+	font-family: Consolas, "Courier New", Courier, Monospace;
+	background-color: #ffffff;
+	/*white-space: pre;*/
+}
+.csharpcode pre { margin: 0em; }
+.csharpcode .rem { color: #008000; }
+.csharpcode .kwrd { color: #0000ff; }
+.csharpcode .str { color: #006080; }
+.csharpcode .op { color: #0000c0; }
+.csharpcode .preproc { color: #cc6633; }
+.csharpcode .asp { background-color: #ffff00; }
+.csharpcode .html { color: #800000; }
+.csharpcode .attr { color: #ff0000; }
+.csharpcode .alt 
+{
+	background-color: #f4f4f4;
+	width: 100%;
+	margin: 0em;
+}
+.csharpcode .lnum { color: #606060; }
+  </style>
+</head>
+<body>
+
+<div id="header">
+  <p>&nbsp;</p>
+</div> <!-- header -->
+
+<div id="wrapper">
+
+<div id="sidebar">
+  <div id="menu">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="http://blog.activationrecord.net/">Blog</a></li>
+      <li><a href="/projects">Projects</a>
+        <ul>
+	  <li><a href="/projects/index.html#libjit">libjit</a></li>
+	</ul>
+      </li>
+      <li><a href="/snippets">Snippets</a>
+        <ul>
+	  <li><a href="/snippets/aatree.html">AA-Tree</a></li>
+	</ul>
+        <ul>
+	  <li><a href="/snippets/md5.html">MD5</a></li>
+	</ul>
+      </li>
+      <li><a href="/links.html">Links</a></li>
+    </ul>
+  </div>
+</div> <!-- sidebar -->
+
+<div id="content">
+
+<div id="title">
+  <h1>Balanced Search Trees Made Simple (In C#)</h1>
+</div>
+
+<p>Balanced Binary Search Trees (BST) is nothing new. The two most popular variants
+of them are AVL trees and Red-Black trees. Apart from standard textbooks on algorithms
+and data structures (like
+<a href="http://en.wikipedia.org/wiki/Introduction_to_Algorithms">Cormen et al.</a>)
+a great resource on this is
+ <a href="ftp://ftp.gnu.org/pub/gnu/avl/avl-2.0.3.tar.gz">GNU libavl</a>. Despite its
+name it deals not only with AVL trees but with Red-Black trees too. Also it is not
+quite a library. It is a complete book with detailed discussion of BSTs in general and
+accompinied with the working C-library.</p>
+
+<p>Even though BSTs are known for decades and the afore-mentioned two types of BSTs
+found widespread use in real-world software the computer scientists keep inventing new
+BSTs. For instance, just a few years ago there was a lot of research papers on
+Relaxed-Balance BSTs. Supposedly this type of trees should work better in case of parallel
+insert and search access.</p>
+
+<p>However here I am going to provide an implementation of a BST that is not very new.
+It is described in <a href="http://user.it.uu.se/~arnea/">Arne Andersson</a>'s
+<a href="http://user.it.uu.se/~arnea/abs/simp.html">paper</a> that dates back to 1993.
+<a href="http://en.wikipedia.org/wiki/AA_tree">Sometimes</a> this variant of tree is
+called AA-tree upon the initials of its inventor. I am not sure if this is correct as
+there is <a href="http://user.it.uu.se/~arnea/abs/gb.html">yet another balanced tree
+variant invented by him</a>. However as I am going to stick to the former tree here
+I will call it AA-tree too.</p>
+
+<p>The distinguishing feature of the AA-tree is that it has the most simple
+implementation among balanced trees. Its performance might be somewhat worse than the
+performance of a Red-Black tree. However it might still be useful in a case when you
+need to quickly hatch together a tree and the time spent on debugging more complex code
+outweights a few percents of performance advantage. Some may say that when things like
+STL is available who cares about writing binary trees themselves. In the vast majority
+of cases this is absolutely true. There is no need to re-invent the wheel. However
+sometimes unexpected happens. Enough to say that I have used AA-trees once in a real
+project.</p>
+
+<p>The original paper provides Pascal implementation of the tree. This
+is unfortunate as <a href="http://www.ee.ryerson.ca/~elf/hack/realmen.html">Real
+Programmers Don't Use Pascal</a>. But not everything is lost, there is very nice and funny
+(well, funny only for geek-types perhaps)
+<a href="http://www.eternallyconfuzzled.com">Eternally Confuzzled</a> web-site that has an
+<a href="http://www.eternallyconfuzzled.com/tuts/datastructures/jsw_tut_andersson.aspx">
+AA-tree tutorial</a>. By itself the tutorial is very good. It describes exactly what
+AA-trees are. It provides insight into their internal working that might be very useful
+for programmers as Andersson's paper is perhaps a little bit too dry.</p>
+
+<p>Another thing that the <a href="http://www.eternallyconfuzzled.com/tuts/datastructures/jsw_tut_andersson.aspx">
+tutorial</a> demonstrates very well is the sort of things the Real C-Programmers might do
+to optimize the code. The tutorial provides few different C-implementaions of AA-trees.
+In a series of gradual improvements it comes up with the code that much better than the
+original one from the point of a view of any competent C-programmer. However this code
+looks more complex. I would say if one cares about performance more than about simplicity
+then the right thing would be to start with a Red-Black tree in the first place.</p>
+
+<p>Unfortunately, the Wikipedia <a href="http://en.wikipedia.org/wiki/AA_tree">article
+on AA-trees</a> also provides an "optimized" C-code that does not resemble the original
+Pascal code. So I am here to fix this. [Update: it seems that now wikipedians fixed this too]
+I will provide my version of AA-trees. But I've chosen C# as the implementation language.</p>
+
+<p>And I am sorry I provide only the code. I will be unable to explain AA-trees any
+better than the
+<a href="http://www.eternallyconfuzzled.com/tuts/datastructures/jsw_tut_andersson.aspx">
+Eternally Confuzzled tutorial</a> does.</p>
+
+<h2>C# Implementation</h2>
+
+<p>First of all, the supplementary <i>Node</i> class definition. A typical tree node,
+nothing special.</p>
+
+<pre class="csharpcode">
+        <span class="kwrd">private</span> <span class="kwrd">class</span> Node
+        {
+                <span class="rem">// node internal data</span>
+                <span class="kwrd">internal</span> <span class="kwrd">int</span> level;
+                <span class="kwrd">internal</span> Node left;
+                <span class="kwrd">internal</span> Node right;
+
+                <span class="rem">// user data</span>
+                <span class="kwrd">internal</span> TKey key;
+                <span class="kwrd">internal</span> TValue value;
+
+                <span class="rem">// constuctor for the sentinel node</span>
+                <span class="kwrd">internal</span> Node()
+                {
+                        <span class="kwrd">this</span>.level = 0;
+                        <span class="kwrd">this</span>.left = <span class="kwrd">this</span>;
+                        <span class="kwrd">this</span>.right = <span class="kwrd">this</span>;
+                }
+
+                <span class="rem">// constuctor for regular nodes (that all start life as leaf nodes)</span>
+                <span class="kwrd">internal</span> Node(TKey key, TValue value, Node sentinel)
+                {
+                        <span class="kwrd">this</span>.level = 1;
+                        <span class="kwrd">this</span>.left = sentinel;
+                        <span class="kwrd">this</span>.right = sentinel;
+                        <span class="kwrd">this</span>.key = key;
+                        <span class="kwrd">this</span>.value = value;
+                }
+        }
+</pre>
+
+<p>The <i>Node</i> class is defined inside the <i>AATree</i> class and is not externally
+visible. The <i>AATree</i> class is generic. It has two type parameters: <i>TKey</i> and
+<i>TValue</i>. The <i>TKey</i> type is the one used to order tree nodes. It has to implement
+<i>IComparable</i> interface. Now let's see the <i>AATree</i> class, its member fields and
+the constructor that initializes them.</p>
+
+<pre class="csharpcode">
+<span class="kwrd">public</span> <span class="kwrd">class</span> AATree&lt;TKey, TValue&gt; <span class="kwrd">where</span> TKey : IComparable&lt;TKey&gt;
+{
+        Node root;
+        Node sentinel;
+        Node deleted;
+
+        <span class="kwrd">public</span> AATree()
+        {
+                root = sentinel = <span class="kwrd">new</span> Node();
+                deleted = <span class="kwrd">null</span>;
+        }
+</pre>
+
+We are ready for the methods that implement AA-tree algorithm as it presented in the
+Andersson's paper. They very closely match the original Pascal procedures.
+
+<pre class="csharpcode">
+        <span class="kwrd">private</span> <span class="kwrd">void</span> Skew(<span class="kwrd">ref</span> Node node)
+        {
+                <span class="kwrd">if</span> (node.level == node.left.level) {
+                        <span class="rem">// rotate right</span>
+                        Node left = node.left;
+                        node.left = left.right;
+                        left.right = node;
+                        node = left;
+                }
+        }
+
+        <span class="kwrd">private</span> <span class="kwrd">void</span> Split(<span class="kwrd">ref</span> Node node)
+        {
+                <span class="kwrd">if</span> (node.right.right.level == node.level) {
+                        <span class="rem">// rotate left</span>
+                        Node right = node.right;
+                        node.right = right.left;
+                        right.left = node;
+                        node = right;
+                        node.level++;
+                }
+        }
+
+        <span class="kwrd">private</span> <span class="kwrd">bool</span> Insert(<span class="kwrd">ref</span> Node node, TKey key, TValue value)
+        {
+                <span class="kwrd">if</span> (node == sentinel) {
+                        node = <span class="kwrd">new</span> Node(key, value, sentinel);
+                        <span class="kwrd">return</span> <span class="kwrd">true</span>;
+                }
+
+                <span class="kwrd">int</span> compare = key.CompareTo(node.key);
+                <span class="kwrd">if</span> (compare &lt; 0) {
+                        <span class="kwrd">if</span> (!Insert(<span class="kwrd">ref</span> node.left, key, value))
+                                <span class="kwrd">return</span> <span class="kwrd">false</span>;
+                } <span class="kwrd">else</span> <span class="kwrd">if</span> (compare &gt; 0) {
+                        <span class="kwrd">if</span> (!Insert(<span class="kwrd">ref</span> node.right, key, value))
+                                <span class="kwrd">return</span> <span class="kwrd">false</span>;
+                } <span class="kwrd">else</span> {
+                        <span class="kwrd">return</span> <span class="kwrd">false</span>;
+                }
+
+                Skew(<span class="kwrd">ref</span> node);
+                Split(<span class="kwrd">ref</span> node);
+
+                <span class="kwrd">return</span> <span class="kwrd">true</span>;
+        }
+
+        <span class="kwrd">private</span> <span class="kwrd">bool</span> Delete(<span class="kwrd">ref</span> Node node, TKey key)
+        {
+                <span class="kwrd">if</span> (node == sentinel) {
+                        <span class="kwrd">return</span> (deleted != <span class="kwrd">null</span>);
+                }
+
+                <span class="kwrd">int</span> compare = key.CompareTo(node.key);
+                <span class="kwrd">if</span> (compare &lt; 0) {
+                        <span class="kwrd">if</span> (!Delete(<span class="kwrd">ref</span> node.left, key))
+                                <span class="kwrd">return</span> <span class="kwrd">false</span>;
+                } <span class="kwrd">else</span> {
+                        <span class="kwrd">if</span> (compare == 0)
+                                deleted = node;
+                        <span class="kwrd">if</span> (!Delete(<span class="kwrd">ref</span> node.right, key))
+                                <span class="kwrd">return</span> <span class="kwrd">false</span>;
+                }
+
+                <span class="kwrd">if</span> (deleted != <span class="kwrd">null</span>) {
+                        deleted.key = node.key;
+                        deleted.value = node.value;
+                        deleted = <span class="kwrd">null</span>;
+                        node = node.right;
+                } <span class="kwrd">else</span> <span class="kwrd">if</span> (node.left.level &lt; node.level - 1
+                        || node.right.level &lt; node.level - 1) {
+                        --node.level;
+                        <span class="kwrd">if</span> (node.right.level &gt; node.level)
+                                node.right.level = node.level;
+                        Skew(<span class="kwrd">ref</span> node);
+                        Skew(<span class="kwrd">ref</span> node.right);
+                        Skew(<span class="kwrd">ref</span> node.right.right);
+                        Split(<span class="kwrd">ref</span> node);
+                        Split(<span class="kwrd">ref</span> node.right);
+                }
+
+                <span class="kwrd">return</span> <span class="kwrd">true</span>;
+        }
+</pre>
+
+<p>The most notable difference is the <i>Delete</i> method uses three-way compare whereas
+the original paper used two-way compare. This is a possible performance disadvantage in
+exchange to using generic <i>IComporable</i> interface.</p>
+<p>And at last the source code file: <a href="aatree.cs">aatree.cs</a></p>
+
+<h2>References</h2>
+
+<ul>
+<li><a href="http://user.it.uu.se/~arnea/abs/simp.html">A. Andersson. Balanced search trees made simple.</a></li>
+<li><a href="http://www.eternallyconfuzzled.com/tuts/datastructures/jsw_tut_andersson.aspx">Eternally Confuzzled - Andersson Tree Tutorial</li>
+<li><a href="http://en.wikipedia.org/wiki/AA_tree">Wikipedia - AA tree</a></li>
+</ul>
+
+</div> <!-- content -->
+
+</div> <!-- wrapper -->
+
+<div id="footer">
+  <p>Copyright &copy; 2007 Aleksey Demakov | <a href="mailto:ademakov@gmail.com">Contact me</a></p>
+</div> <!-- footer -->
+
+</body>
+</html>
