@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1"/>
+  <meta name="author" content="Aleksey Demakov"/>
+  <title>Aleksey Demakov's Projects</title>
+  <link rel="stylesheet" href="/style.css" type="text/css">
+  <!--[if lt IE 7]>
+    <link rel="stylesheet" href="/ie6.css" type="text/css">
+  <![endif]-->
+</head>
+<body>
+
+<div id="header">
+  <p>&nbsp;</p>
+</div> <!-- header -->
+
+<div id="wrapper">
+
+<div id="sidebar">
+  <div id="menu">
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="http://blog.activationrecord.net/">Blog</a></li>
+      <li><a href="/projects">Projects</a>
+        <ul>
+	  <li><a href="/projects/index.html#libjit">libjit</a></li>
+	</ul>
+      </li>
+      <li><a href="/snippets">Snippets</a>
+        <ul>
+	  <li><a href="/snippets/aatree.html">AA-Tree</a></li>
+	</ul>
+        <ul>
+	  <li><a href="/snippets/md5.html">MD5</a></li>
+	</ul>
+      </li>
+      <li><a href="/links.html">Links</a></li>
+    </ul>
+  </div>
+</div> <!-- sidebar -->
+
+<div id="content">
+
+<div id="title">
+  <h1>Aleksey Demakov's Projects</h1>
+</div>
+
+<h1>Libjit</h1>
+
+<p>Libjit is a reusable JIT-compiler library. It started off as a part of the
+<a href="http://dotgnu.org/pnet.html">DotGNU Portable.NET</a> project and was
+used as the backend for its JIT engine. But the aim of libjit is to provide
+generic JIT functionality independent of any particular bytecode, language, or
+runtime. Therefore currently libjit is a separate project on its own right.</p>
+
+<p>The official libjit homepage is here:</p>
+
+<a href="http://www.gnu.org/software/libjit/">http://www.gnu.org/software/libjit/</a>
+
+<p>Apart from Portable.NET these independent open-source projects also use (or had used)
+libjit:</p>
+
+<ul>
+<li><a href="http://ildjit.sourceforge.net/">ILDJIT</a> - yet another CIL bytecode
+virtual machine.</li>
+<li><a href="http://rubystuff.org/ludicrous/">Ludicrous JIT compiler for Ruby</a>.</li>
+</ul>
+
+<p>Additionally libjit is used in-house by <a href="http://www.bbva.com">BBVA</a>,
+here is a testimonial from them:</p>
+
+<blockquote>
+<p>We, at BBVA (http://www.bbva.com) are using libjit for the run-time optimization of dynamic structures in the field of financial derivatives valuation.</p>
+<p>We chose libjit because its features were very well adapted to our needs, and it was easy to integrate as a shared library in Microsoft Windows, one of our primary development platforms. It is seamlessly liberating us from the compilation-time vs. run-time choice when we need both performance and flexibility.</p>
+</blockquote>
+
+<p>Libjit (as well as the whole Portable.NET project) was started by Rhys Weatherley.
+In the true open source way it contains contributions from many people. Currenly I am
+the libjit maintainer.</p>
+
+<p>The latest stable libjit release can be found here (although it is severely out of date so its use is discouraged):</p>
+
+<a href="http://ftp.gnu.org/old-gnu/dotgnu/libjit/libjit-0.1.2.tar.gz">http://ftp.gnu.org/old-gnu/dotgnu/libjit/libjit-0.1.2.tar.gz</a>
+
+<p>The latest source code snapshot is available with the following command:</p>
+
+<pre>git clone git://git.savannah.gnu.org/libjit.git</pre>
+
+<p>The libjit documentation may be built from the source tree.
+<a href="libjit-docs/libjit.html">Onine HTML documentation</a> is avaialble
+as well.</p>
+
+</div> <!-- content -->
+
+</div> <!-- wrapper -->
+
+<div id="footer">
+  <p>Copyright &copy; 2007 Aleksey Demakov | <a href="mailto:ademakov@gmail.com">Contact me</a></p>
+</div> <!-- footer -->
+
+</body>
+</html>
