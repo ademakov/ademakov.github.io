@@ -1,0 +1,15 @@
+/* IE 6 bug workarounds */
+
+body {
+  width:expression(
+    (d = document.compatMode == "CSS1Compat" ? document.documentElement : document.body) &&
+    (d.clientWidth < 600 ? "600px" : "auto"));
+}
+
+#wrapper {
+  height: 20em;
+}
+
+#menu ul li {
+  display: inline-block;
+}
