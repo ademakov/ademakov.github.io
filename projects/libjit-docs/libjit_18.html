@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created on April 29, 2015 by texi2html 5.0
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>Just-In-Time Compiler Library: 18 Values in C++</title>
+
+<meta name="description" content="Just-In-Time Compiler Library: 18 Values in C++">
+<meta name="keywords" content="Just-In-Time Compiler Library: 18 Values in C++">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 5.0">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:pre}
+span.nolinebreak {white-space:pre}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="C_002b_002b-Values"></a>
+<table class="header" cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="libjit_17.html#C_002b_002b-Contexts" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_17.html#C_002b_002b-Contexts" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[ Up ]</td>
+<td valign="middle" align="left">[<a href="libjit_19.html#C_002b_002b-Functions" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_19.html#C_002b_002b-Functions" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="libjit.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_21.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Values-in-C_002b_002b"></a>
+<h1 class="chapter">18 Values in C++</h1>
+<a name="index-C_002b_002b-values"></a>
+
+
+
+
+<p>The <code>jit_value</code> class provides a C++ counterpart to the
+<code>jit_value_t</code> type.  Values normally result by calling methods
+on the <code>jit_function</code> class during the function building process.
+See section <a href="libjit_7.html#Values">Working with temporary values in the JIT</a>, for more information on creating and managing values.
+</p>
+<dl>
+<dt><a name="index-jit_005fvalue-on-jit_005fvalue"></a>Constructor on jit_value: <strong>jit_value</strong><em> ()</em></dt>
+<dd><p>Construct an empty value.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fvalue-on-jit_005fvalue-1"></a>Constructor on jit_value: <strong>jit_value</strong><em> (jit_value_t <var>value</var>)</em></dt>
+<dd><p>Construct a value by wrapping up a raw C <code>jit_value_t</code> object.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fvalue-on-jit_005fvalue-2"></a>Constructor on jit_value: <strong>jit_value</strong><em> (const jit_value&amp; <var>value</var>)</em></dt>
+<dd><p>Create a copy of <var>value</var>.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-_007ejit_005fvalue-on-jit_005fvalue"></a>Destructor on jit_value: <strong>~jit_value</strong><em> ()</em></dt>
+<dd><p>Destroy the C++ value wrapper, but leave the underlying raw C
+value alone.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fvalue_0026-operator_003d-on-jit_005fvalue"></a>Operator on jit_value: <strong>jit_value&amp; operator=</strong><em> (const jit_value&amp; <var>value</var>)</em></dt>
+<dd><p>Copy <code>jit_value</code> objects.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-raw-on-jit_005fvalue"></a>Method on jit_value: <em>jit_value_t</em> <strong>raw</strong><em> () const</em></dt>
+<dd><p>Get the raw C <code>jit_value_t</code> value that underlies this object.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-is_005fvalid-on-jit_005fvalue"></a>Method on jit_value: <em>int</em> <strong>is_valid</strong><em> () const</em></dt>
+<dd><p>Determine if this <code>jit_value</code> object contains a valid raw
+C <code>jit_value_t</code> value.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-is_005ftemporary-on-jit_005fvalue"></a>Method on jit_value: <em>int</em> <strong>is_temporary</strong><em> () const</em></dt>
+<dt><a name="index-is_005flocal-on-jit_005fvalue"></a>Method on jit_value: <em>int</em> <strong>is_local</strong><em> () const</em></dt>
+<dt><a name="index-is_005fconstant-on-jit_005fvalue"></a>Method on jit_value: <em>int</em> <strong>is_constant</strong><em> () const</em></dt>
+<dd><p>Determine if this <code>jit_value</code> is temporary, local, or constant.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-set_005fvolatile-on-jit_005fvalue"></a>Method on jit_value: <em>void</em> <strong>set_volatile</strong><em> ()</em></dt>
+<dt><a name="index-is_005fvolatile-on-jit_005fvalue"></a>Method on jit_value: <em>int</em> <strong>is_volatile</strong><em> () const</em></dt>
+<dd><p>Set or check the &quot;volatile&quot; state on this value.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-set_005faddressable-on-jit_005fvalue"></a>Method on jit_value: <em>void</em> <strong>set_addressable</strong><em> ()</em></dt>
+<dt><a name="index-is_005faddressable-on-jit_005fvalue"></a>Method on jit_value: <em>int</em> <strong>is_addressable</strong><em> () const</em></dt>
+<dd><p>Set or check the &quot;addressable&quot; state on this value.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-type-on-jit_005fvalue"></a>Method on jit_value: <em>jit_type_t</em> <strong>type</strong><em> () const</em></dt>
+<dd><p>Get the type of this value.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-function-on-jit_005fvalue"></a>Method on jit_value: <em>jit_function_t</em> <strong>function</strong><em> () const</em></dt>
+<dt><a name="index-block-on-jit_005fvalue"></a>Method on jit_value: <em>jit_block_t</em> <strong>block</strong><em> () const</em></dt>
+<dt><a name="index-context-on-jit_005fvalue"></a>Method on jit_value: <em>jit_context_t</em> <strong>context</strong><em> () const</em></dt>
+<dd><p>Get the owning function, block, or context for this value.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-constant-on-jit_005fvalue"></a>Method on jit_value: <em>jit_constant_t</em> <strong>constant</strong><em> () const</em></dt>
+<dt><a name="index-nint_005fconstant-on-jit_005fvalue"></a>Method on jit_value: <em>jit_nint</em> <strong>nint_constant</strong><em> () const</em></dt>
+<dt><a name="index-long_005fconstant-on-jit_005fvalue"></a>Method on jit_value: <em>jit_long</em> <strong>long_constant</strong><em> () const</em></dt>
+<dt><a name="index-float32_005fconstant-on-jit_005fvalue"></a>Method on jit_value: <em>jit_float32</em> <strong>float32_constant</strong><em> () const</em></dt>
+<dt><a name="index-float64_005fconstant-on-jit_005fvalue"></a>Method on jit_value: <em>jit_float64</em> <strong>float64_constant</strong><em> () const</em></dt>
+<dt><a name="index-nfloat_005fconstant-on-jit_005fvalue"></a>Method on jit_value: <em>jit_nfloat</em> <strong>nfloat_constant</strong><em> () const</em></dt>
+<dd><p>Extract the constant stored in this value.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fvalue-operator_002b-on-jit_005fvalue"></a>Operator on jit_value: <strong>jit_value operator+</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-jit_005fvalue-operator_002d-on-jit_005fvalue"></a>Operator on jit_value: <strong>jit_value operator-</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-jit_005fvalue-operator_002a-on-jit_005fvalue"></a>Operator on jit_value: <strong>jit_value operator*</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-jit_005fvalue-operator_002f-on-jit_005fvalue"></a>Operator on jit_value: <strong>jit_value operator/</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-jit_005fvalue-operator_0025-on-jit_005fvalue"></a>Operator on jit_value: <strong>jit_value operator%</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-jit_005fvalue-operator_002d-on-jit_005fvalue-1"></a>Operator on jit_value: <strong>jit_value operator-</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-jit_005fvalue-operator_0026-on-jit_005fvalue"></a>Operator on jit_value: <strong>jit_value operator&amp;</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-jit_005fvalue-operator_007c-on-jit_005fvalue"></a>Operator on jit_value: <strong>jit_value operator|</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-jit_005fvalue-operator_005e-on-jit_005fvalue"></a>Operator on jit_value: <strong>jit_value operator^</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-jit_005fvalue-operator_007e-on-jit_005fvalue"></a>Operator on jit_value: <strong>jit_value operator~</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-jit_005fvalue-operator_003c_003c-on-jit_005fvalue"></a>Operator on jit_value: <strong>jit_value operator&lt;&lt;</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-jit_005fvalue-operator_003e_003e-on-jit_005fvalue"></a>Operator on jit_value: <strong>jit_value operator&gt;&gt;</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-jit_005fvalue-operator_003d_003d-on-jit_005fvalue"></a>Operator on jit_value: <strong>jit_value operator==</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-jit_005fvalue-operator_0021_003d-on-jit_005fvalue"></a>Operator on jit_value: <strong>jit_value operator!=</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-jit_005fvalue-operator_003c-on-jit_005fvalue"></a>Operator on jit_value: <strong>jit_value operator&lt;</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-jit_005fvalue-operator_003c_003d-on-jit_005fvalue"></a>Operator on jit_value: <strong>jit_value operator&lt;=</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-jit_005fvalue-operator_003e-on-jit_005fvalue"></a>Operator on jit_value: <strong>jit_value operator&gt;</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-jit_005fvalue-operator_003e_003d-on-jit_005fvalue"></a>Operator on jit_value: <strong>jit_value operator&gt;=</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dd><p>Generate an arithmetic, bitwise, or comparison instruction based on
+one or two <code>jit_value</code> objects.  These operators are shortcuts
+for calling <code>insn_add</code>, <code>insn_sub</code>, etc on the
+<code>jit_function</code> object.
+</p></dd></dl>
+
+
+
+
+<hr>
+<table class="header" cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="libjit_17.html#C_002b_002b-Contexts" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_19.html#C_002b_002b-Functions" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="libjit.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_21.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated on <i>April 29, 2015</i> using <a href="http://www.nongnu.org/texi2html/"><i>texi2html 5.0</i></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

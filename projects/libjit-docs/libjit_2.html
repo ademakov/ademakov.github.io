@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created on April 29, 2015 by texi2html 5.0
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>Just-In-Time Compiler Library: 2 Features of libjit</title>
+
+<meta name="description" content="Just-In-Time Compiler Library: 2 Features of libjit">
+<meta name="keywords" content="Just-In-Time Compiler Library: 2 Features of libjit">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 5.0">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:pre}
+span.nolinebreak {white-space:pre}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Features"></a>
+<table class="header" cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="libjit.html#Introduction" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_1.html#Further-reading" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[ Up ]</td>
+<td valign="middle" align="left">[<a href="libjit_3.html#Tutorials" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_3.html#Tutorials" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="libjit.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_21.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Features-of-libjit"></a>
+<h1 class="chapter">2 Features of libjit</h1>
+<a name="index-Features"></a>
+
+<ul>
+<li>
+The primary interface is in C, for maximal reusability.  Class
+interfaces are available for programmers who prefer C++.
+
+</li><li>
+Designed for portability to all major 32-bit and 64-bit platforms.
+
+</li><li>
+Simple three-address API for library users, but opaque enough that other
+representations can be used inside the library in future without
+affecting existing users.
+
+</li><li>
+Up-front or on-demand compilation of any function.
+
+</li><li>
+In-built support to re-compile functions with greater optimization,
+automatically redirecting previous callers to the new version.
+
+</li><li>
+Fallback interpreter for running code on platforms that don&rsquo;t
+have a native code generator yet.  This reduces the need for
+programmers to write their own interpreters for such platforms.
+
+</li><li>
+Arithmetic, bitwise, conversion, and comparison operators for 8-bit,
+16-bit, 32-bit, or 64-bit integer types; and 32-bit, 64-bit, or longer
+floating point types.  Includes overflow detecting arithmetic for
+integer types.
+
+</li><li>
+Large set of mathematical and trigonometric operations
+(sqrt, sin, cos, min, abs, etc) for inlining floating-point library functions.
+
+</li><li>
+Simplified type layout and exception handling mechanisms, upon which a
+variety of different object models can be built.
+
+</li><li>
+Support for nested functions, able to access their parent&rsquo;s local variables
+(for implementing Pascal-style languages).
+</li></ul>
+
+
+<hr>
+<table class="header" cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="libjit.html#Introduction" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_3.html#Tutorials" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="libjit.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_21.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated on <i>April 29, 2015</i> using <a href="http://www.nongnu.org/texi2html/"><i>texi2html 5.0</i></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

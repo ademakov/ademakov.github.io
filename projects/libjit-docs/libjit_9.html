@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created on April 29, 2015 by texi2html 5.0
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>Just-In-Time Compiler Library: 9 Working with basic blocks in the JIT</title>
+
+<meta name="description" content="Just-In-Time Compiler Library: 9 Working with basic blocks in the JIT">
+<meta name="keywords" content="Just-In-Time Compiler Library: 9 Working with basic blocks in the JIT">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 5.0">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:pre}
+span.nolinebreak {white-space:pre}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Basic-Blocks"></a>
+<table class="header" cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="libjit_8.html#Instructions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_8.html#Instructions" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[ Up ]</td>
+<td valign="middle" align="left">[<a href="libjit_10.html#Intrinsics" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_10.html#Intrinsics" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="libjit.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_21.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Working-with-basic-blocks-in-the-JIT"></a>
+<h1 class="chapter">9 Working with basic blocks in the JIT</h1>
+<a name="index-Working-with-basic-blocks"></a>
+
+
+
+
+<a name="index-jit_002dblock_002eh"></a>
+
+
+<dl>
+<dt><a name="index-jit_005fblock_005fget_005ffunction"></a>Function: <em>jit_function_t</em> <strong>jit_block_get_function</strong><em> (jit_block_t <var>block</var>)</em></dt>
+<dd><p>Get the function that a particular <var>block</var> belongs to.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fblock_005fget_005fcontext"></a>Function: <em>jit_context_t</em> <strong>jit_block_get_context</strong><em> (jit_block_t <var>block</var>)</em></dt>
+<dd><p>Get the context that a particular <var>block</var> belongs to.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fblock_005fget_005flabel"></a>Function: <em>jit_label_t</em> <strong>jit_block_get_label</strong><em> (jit_block_t <var>block</var>)</em></dt>
+<dd><p>Get the label associated with a block.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fblock_005fget_005fnext_005flabel"></a>Function: <em>jit_label_t</em> <strong>jit_block_get_next_label</strong><em> (jit_block_t <var>block</var>, jit_label_t <var>label</var>)</em></dt>
+<dd><p>Get the next label associated with a block.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fblock_005fnext"></a>Function: <em>jit_block_t</em> <strong>jit_block_next</strong><em> (jit_function_t <var>func</var>, jit_block_t <var>previous</var>)</em></dt>
+<dd><p>Iterate over the blocks in a function, in order of their creation.
+The <var>previous</var> argument should be NULL on the first call.
+This function will return NULL if there are no further blocks to iterate.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fblock_005fprevious"></a>Function: <em>jit_block_t</em> <strong>jit_block_previous</strong><em> (jit_function_t <var>func</var>, jit_block_t <var>previous</var>)</em></dt>
+<dd><p>Iterate over the blocks in a function, in reverse order of their creation.
+The <var>previous</var> argument should be NULL on the first call.
+This function will return NULL if there are no further blocks to iterate.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fblock_005ffrom_005flabel"></a>Function: <em>jit_block_t</em> <strong>jit_block_from_label</strong><em> (jit_function_t <var>func</var>, jit_label_t <var>label</var>)</em></dt>
+<dd><p>Get the block that corresponds to a particular <var>label</var>.
+Returns NULL if there is no block associated with the label.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fblock_005fset_005fmeta"></a>Function: <em>int</em> <strong>jit_block_set_meta</strong><em> (jit_block_t <var>block</var>, int <var>type</var>, void *<var>data</var>, jit_meta_free_func <var>free_data</var>)</em></dt>
+<dd><p>Tag a block with some metadata.  Returns zero if out of memory.
+If the <var>type</var> already has some metadata associated with it, then
+the previous value will be freed.  Metadata may be used to store
+dependency graphs, branch prediction information, or any other
+information that is useful to optimizers or code generators.
+</p>
+<p>Metadata type values of 10000 or greater are reserved for internal use.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fblock_005fget_005fmeta"></a>Function: <em>void *</em> <strong>jit_block_get_meta</strong><em> (jit_block_t <var>block</var>, int <var>type</var>)</em></dt>
+<dd><p>Get the metadata associated with a particular tag.  Returns NULL
+if <var>type</var> does not have any metadata associated with it.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fblock_005ffree_005fmeta"></a>Function: <em>void</em> <strong>jit_block_free_meta</strong><em> (jit_block_t <var>block</var>, int <var>type</var>)</em></dt>
+<dd><p>Free metadata of a specific type on a block.  Does nothing if
+the <var>type</var> does not have any metadata associated with it.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fblock_005fis_005freachable"></a>Function: <em>int</em> <strong>jit_block_is_reachable</strong><em> (jit_block_t <var>block</var>)</em></dt>
+<dd><p>Determine if a block is reachable from some other point in
+its function.  Unreachable blocks can be discarded in their
+entirety.  If the JIT is uncertain as to whether a block is
+reachable, or it does not wish to perform expensive flow
+analysis to find out, then it will err on the side of caution
+and assume that it is reachable.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fblock_005fends_005fin_005fdead"></a>Function: <em>int</em> <strong>jit_block_ends_in_dead</strong><em> (jit_block_t <var>block</var>)</em></dt>
+<dd><p>Determine if a block ends in a &quot;dead&quot; marker.  That is, control
+will not fall out through the end of the block.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fblock_005fcurrent_005fis_005fdead"></a>Function: <em>int</em> <strong>jit_block_current_is_dead</strong><em> (jit_function_t <var>func</var>)</em></dt>
+<dd><p>Determine if the current point in the function is dead.  That is,
+there are no existing branches or fall-throughs to this point.
+This differs slightly from <code>jit_block_ends_in_dead</code> in that
+this can skip past zero-length blocks that may not appear to be
+dead to find the dead block at the head of a chain of empty blocks.
+</p></dd></dl>
+
+
+
+<hr>
+<table class="header" cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="libjit_8.html#Instructions" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_10.html#Intrinsics" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="libjit.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_21.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated on <i>April 29, 2015</i> using <a href="http://www.nongnu.org/texi2html/"><i>texi2html 5.0</i></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

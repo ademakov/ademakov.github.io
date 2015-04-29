@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created on April 29, 2015 by texi2html 5.0
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>Just-In-Time Compiler Library: 15 Diagnostic routines</title>
+
+<meta name="description" content="Just-In-Time Compiler Library: 15 Diagnostic routines">
+<meta name="keywords" content="Just-In-Time Compiler Library: 15 Diagnostic routines">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 5.0">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:pre}
+span.nolinebreak {white-space:pre}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Diagnostic-Routines"></a>
+<table class="header" cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="libjit_14.html#Utility-Routines" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_14.html#Dynamic-libraries" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[ Up ]</td>
+<td valign="middle" align="left">[<a href="libjit_16.html#C_002b_002b-Interface" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_16.html#C_002b_002b-Interface" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="libjit.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_21.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Diagnostic-routines"></a>
+<h1 class="chapter">15 Diagnostic routines</h1>
+<a name="index-Diagnostic-routines"></a>
+
+
+
+
+<a name="index-jit_002ddump_002eh"></a>
+
+
+<dl>
+<dt><a name="index-jit_005fdump_005ftype"></a>Function: <em>void</em> <strong>jit_dump_type</strong><em> (FILE *<var>stream</var>, jit_type_t <var>type</var>)</em></dt>
+<dd><p>Dump the name of a type to a stdio stream.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fdump_005fvalue"></a>Function: <em>void</em> <strong>jit_dump_value</strong><em> (FILE *<var>stream</var>, jit_function_t <var>func</var>, jit_value_t <var>value</var>, const char *<var>prefix</var>)</em></dt>
+<dd><p>Dump the name of a value to a stdio stream.  If <var>prefix</var> is not
+NULL, then it indicates a type prefix to add to the value name.
+If <var>prefix</var> is NULL, then this function intuits the type prefix.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fdump_005finsn"></a>Function: <em>void</em> <strong>jit_dump_insn</strong><em> (FILE *<var>stream</var>, jit_function_t <var>func</var>, jit_value_t <var>value</var>)</em></dt>
+<dd><p>Dump the contents of an instruction to a stdio stream.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fdump_005ffunction"></a>Function: <em>void</em> <strong>jit_dump_function</strong><em> (FILE *<var>stream</var>, jit_function_t <var>func</var>, const char *<var>name</var>)</em></dt>
+<dd><p>Dump the three-address instructions within a function to a stream.
+The <var>name</var> is attached to the output as a friendly label, but
+has no other significance.
+</p>
+<p>If the function has not been compiled yet, then this will dump the
+three address instructions from the build process.  Otherwise it will
+disassemble and dump the compiled native code.
+</p></dd></dl>
+
+
+
+<hr>
+<table class="header" cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="libjit_14.html#Utility-Routines" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_16.html#C_002b_002b-Interface" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="libjit.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_21.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated on <i>April 29, 2015</i> using <a href="http://www.nongnu.org/texi2html/"><i>texi2html 5.0</i></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

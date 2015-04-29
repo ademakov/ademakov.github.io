@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created on April 29, 2015 by texi2html 5.0
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>Just-In-Time Compiler Library: 17 Contexts in C++</title>
+
+<meta name="description" content="Just-In-Time Compiler Library: 17 Contexts in C++">
+<meta name="keywords" content="Just-In-Time Compiler Library: 17 Contexts in C++">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 5.0">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:pre}
+span.nolinebreak {white-space:pre}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="C_002b_002b-Contexts"></a>
+<table class="header" cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="libjit_16.html#C_002b_002b-Interface" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_16.html#C_002b_002b-Interface" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[ Up ]</td>
+<td valign="middle" align="left">[<a href="libjit_18.html#C_002b_002b-Values" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_18.html#C_002b_002b-Values" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="libjit.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_21.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Contexts-in-C_002b_002b"></a>
+<h1 class="chapter">17 Contexts in C++</h1>
+<a name="index-C_002b_002b-contexts"></a>
+
+
+
+
+<p>The <code>jit_context</code> class provides a C++ counterpart to the
+C <code>jit_context_t</code> type.  See section <a href="libjit_4.html#Initialization">Initializing the JIT</a>, for more
+information on creating and managing contexts.
+</p>
+
+<dl>
+<dt><a name="index-jit_005fcontext-on-jit_005fcontext"></a>Constructor on jit_context: <strong>jit_context</strong><em> ()</em></dt>
+<dd><p>Construct a new JIT context.  This is equivalent to calling
+<code>jit_context_create</code> in the C API.  The raw C context is
+destroyed when the <code>jit_context</code> object is destructed.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fcontext-on-jit_005fcontext-1"></a>Constructor on jit_context: <strong>jit_context</strong><em> (jit_context_t <var>context</var>)</em></dt>
+<dd><p>Construct a new JIT context by wrapping up an existing raw C context.
+This is useful for importing a context from third party C code
+into a program that prefers to use C++.
+</p>
+<p>When you use this form of construction, <code>jit_context_destroy</code>
+will not be called on the context when the <code>jit_context</code>
+object is destructed.  You will need to arrange for that manually.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-_007ejit_005fcontext-on-jit_005fcontext"></a>Destructor on jit_context: <strong>~jit_context</strong><em> ()</em></dt>
+<dd><p>Destruct a JIT context.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-build_005fstart-on-jit_005fcontext"></a>Method on jit_context: <em>void</em> <strong>build_start</strong><em> ()</em></dt>
+<dd><p>Start an explicit build process.  Not needed if you will be using
+on-demand compilation.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-build_005fend-on-jit_005fcontext"></a>Method on jit_context: <em>void</em> <strong>build_end</strong><em> ()</em></dt>
+<dd><p>End an explicit build process.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-raw-on-jit_005fcontext"></a>Method on jit_context: <em>jit_context_t</em> <strong>raw</strong><em> () const</em></dt>
+<dd><p>Get the raw C context pointer that underlies this object.
+</p></dd></dl>
+
+
+
+<hr>
+<table class="header" cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="libjit_16.html#C_002b_002b-Interface" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_18.html#C_002b_002b-Values" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="libjit.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_21.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated on <i>April 29, 2015</i> using <a href="http://www.nongnu.org/texi2html/"><i>texi2html 5.0</i></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

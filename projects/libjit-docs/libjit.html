@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created on April 29, 2015 by texi2html 5.0
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>Just-In-Time Compiler Library: 1 Introduction and rationale for libjit</title>
+
+<meta name="description" content="Just-In-Time Compiler Library: 1 Introduction and rationale for libjit">
+<meta name="keywords" content="Just-In-Time Compiler Library: 1 Introduction and rationale for libjit">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 5.0">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:pre}
+span.nolinebreak {white-space:pre}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<h1 class="titlefont">Just-In-Time Compiler Library</h1>
+
+<p align="center">Copyright &copy; 2004 Southern Storm Software, Pty Ltd
+</p><hr>
+<a name="Top"></a>
+<table class="header" cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[ &lt;&lt; ]</td>
+<td valign="middle" align="left">[ &lt; ]</td>
+<td valign="middle" align="left">[ Up ]</td>
+<td valign="middle" align="left">[<a href="libjit_1.html#Obtaining-libjit" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_2.html#Features" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_21.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top"><a href="#Introduction">1 Introduction and rationale for libjit</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="libjit_2.html#Features">2 Features of libjit</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="libjit_3.html#Tutorials">3 Tutorials in using libjit</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="libjit_4.html#Initialization">4 Initializing the JIT</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="libjit_5.html#Functions">5 Building and compiling functions with the JIT</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="libjit_6.html#Types">6 Manipulating system types</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="libjit_7.html#Values">7 Working with temporary values in the JIT</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="libjit_8.html#Instructions">8 Working with instructions in the JIT</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="libjit_9.html#Basic-Blocks">9 Working with basic blocks in the JIT</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="libjit_10.html#Intrinsics">10 Intrinsic functions available to libjit users</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="libjit_11.html#Exceptions">11 Handling exceptions</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="libjit_12.html#Breakpoint-Debugging">12 Hooking a breakpoint debugger into libjit</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="libjit_13.html#ELF-Binaries">13 Manipulating ELF binaries</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="libjit_14.html#Utility-Routines">14 Miscellaneous utility routines</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="libjit_15.html#Diagnostic-Routines">15 Diagnostic routines</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="libjit_16.html#C_002b_002b-Interface">16 Using libjit from C++</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="libjit_20.html#Porting">20 Porting libjit to new architectures</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+<tr><td align="left" valign="top"><a href="libjit_21.html#Index">Index of concepts and facilities</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top"></td></tr>
+</table>
+
+
+<a name="Introduction"></a>
+<a name="Introduction-and-rationale-for-libjit"></a>
+<h1 class="chapter">1 Introduction and rationale for libjit</h1>
+<a name="index-Introduction"></a>
+
+<p>Just-In-Time compilers are becoming increasingly popular for executing
+dynamic languages like Perl and Python and for semi-dynamic languages
+like Java and C#.  Studies have shown that JIT techniques can get close to,
+and sometimes exceed, the performance of statically-compiled native code.
+</p>
+<p>However, there is a problem with current JIT approaches.  In almost every
+case, the JIT is specific to the object model, runtime support library,
+garbage collector, or bytecode peculiarities of a particular system.
+This inevitably leads to duplication of effort, where all of the good
+JIT work that has gone into one virtual machine cannot be reused in another.
+</p>
+<p>JIT&rsquo;s are not only useful for implementing languages.  They can also be used
+in other programming fields.  Graphical applications can achieve greater
+performance if they can compile a special-purpose rendering routine
+on the fly, customized to the rendering task at hand, rather than using
+static routines.  Needless to say, such applications have no need for
+object models, garbage collectors, or huge runtime class libraries.
+</p>
+<p>Most of the work on a JIT is concerned with arithmetic, numeric type
+conversion, memory loads/stores, looping, performing data flow analysis,
+assigning registers, and generating the executable machine code.
+Only a very small proportion of the work is concerned with language specifics.
+</p>
+<p>The goal of the <code>libjit</code> project is to provide an extensive set of
+routines that takes care of the bulk of the JIT process, without tying the
+programmer down with language specifics.  Where we provide support for
+common object models, we do so strictly in add-on libraries,
+not as part of the core code.
+</p>
+<p>Unlike other systems such as the JVM, .NET, and Parrot, <code>libjit</code>
+is not a virtual machine in its own right.  It is the foundation upon which a
+number of different virtual machines, dynamic scripting languages,
+or customized rendering routines can be built.
+</p>
+<p>The LLVM project (<a href="http://www.llvm.org/">http://www.llvm.org/</a>) has some similar
+characteristics to <code>libjit</code> in that its intermediate format is
+generic across front-end languages.  It is written in C++ and provides
+a large set of compiler development and optimization components;
+much larger than <code>libjit</code> itself provides.  According to its author,
+Chris Lattner, a subset of its capabilities can be used to build JIT&rsquo;s.
+</p>
+<p>Libjit should free developers to think about the design of their front
+ends, and not get bogged down in the details of code execution.
+Meanwhile, experts in the design and implementation of JIT&rsquo;s can concentrate
+on solving code execution problems, instead of front end support issues.
+</p>
+<p>This document describes how to use the library in application programs.
+We start with a list of features and some simple tutorials.  Finally,
+we provide a complete reference guide for all of the API functions in
+<code>libjit</code>, broken down by function category.
+</p>
+<hr>
+<table class="header" cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[ &lt;&lt; ]</td>
+<td valign="middle" align="left">[<a href="libjit_2.html#Features" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_21.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated on <i>April 29, 2015</i> using <a href="http://www.nongnu.org/texi2html/"><i>texi2html 5.0</i></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

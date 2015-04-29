@@ -1,0 +1,437 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created on April 29, 2015 by texi2html 5.0
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>Just-In-Time Compiler Library: 19 Functions in C++</title>
+
+<meta name="description" content="Just-In-Time Compiler Library: 19 Functions in C++">
+<meta name="keywords" content="Just-In-Time Compiler Library: 19 Functions in C++">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 5.0">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:pre}
+span.nolinebreak {white-space:pre}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="C_002b_002b-Functions"></a>
+<table class="header" cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="libjit_18.html#C_002b_002b-Values" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_18.html#C_002b_002b-Values" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[ Up ]</td>
+<td valign="middle" align="left">[<a href="libjit_20.html#Porting" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_20.html#Porting" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="libjit.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_21.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Functions-in-C_002b_002b"></a>
+<h1 class="chapter">19 Functions in C++</h1>
+<a name="index-C_002b_002b-functions"></a>
+
+
+
+
+<p>The <code>jit_function</code> class provides a C++ counterpart to the
+C <code>jit_function_t</code> type.  See section <a href="libjit_5.html#Functions">Building and compiling functions with the JIT</a>, for more information
+on creating and managing functions.
+</p>
+<p>The <code>jit_function</code> class also provides a large number of methods
+for creating the instructions within a function body.  See section <a href="libjit_8.html#Instructions">Working with instructions in the JIT</a>,
+for more information on creating and managing instructions.
+</p>
+
+<dl>
+<dt><a name="index-jit_005ffunction-on-jit_005ffunction"></a>Constructor on jit_function: <strong>jit_function</strong><em> (jit_context&amp; <var>context</var>, jit_type_t <var>signature</var>)</em></dt>
+<dd><p>Constructs a new function handler with the specified <var>signature</var> in
+the given <var>context</var>.  It then calls <code>create(<var>signature</var>)</code> to
+create the actual function.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005ffunction-on-jit_005ffunction-1"></a>Constructor on jit_function: <strong>jit_function</strong><em> (jit_context&amp; <var>context</var>)</em></dt>
+<dd><p>Constructs a new function handler in the specified <var>context</var>.
+The actual function is not created until you call <code>create()</code>.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005ffunction-on-jit_005ffunction-2"></a>Constructor on jit_function: <strong>jit_function</strong><em> (jit_function_t <var>func</var>)</em></dt>
+<dd><p>Constructs a new function handler and wraps it around the specified
+raw C <code>jit_function_t</code> object.  This can be useful for layering
+the C++ on-demand building facility on top of an existing C function.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-_007ejit_005ffunction-on-jit_005ffunction"></a>Destructor on jit_function: <strong>~jit_function</strong><em> ()</em></dt>
+<dd><p>Destroy this function handler.  The raw function will persist
+until the context is destroyed.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-raw-on-jit_005ffunction"></a>Method on jit_function: <em>jit_function_t</em> <strong>raw</strong><em> () const</em></dt>
+<dd><p>Get the raw C <code>jit_function_t</code> value that underlies this object.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-is_005fvalid-on-jit_005ffunction"></a>Method on jit_function: <em>int</em> <strong>is_valid</strong><em> () const</em></dt>
+<dd><p>Determine if the raw C <code>jit_function_t</code> value that
+underlies this object is valid.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-from_005fraw-on-jit_005ffunction"></a>Method on jit_function: <em>static jit_function *</em> <strong>from_raw</strong><em> (jit_function_t <var>func</var>)</em></dt>
+<dd><p>Find the C++ <code>jit_function</code> object that is associated with a
+raw C <code>jit_function_t</code> pointer.  Returns NULL if there is
+no such object.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-signature-on-jit_005ffunction"></a>Method on jit_function: <em>jit_type_t</em> <strong>signature</strong><em> () const</em></dt>
+<dd><p>Get the signature type for this function.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-create-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>create</strong><em> (jit_type_t <var>signature</var>)</em></dt>
+<dd><p>Create this function if it doesn&rsquo;t already exist.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-create-on-jit_005ffunction-1"></a>Method on jit_function: <em>void</em> <strong>create</strong><em> ()</em></dt>
+<dd><p>Create this function if it doesn&rsquo;t already exist.  This version will
+call the virtual <code>create_signature()</code> method to obtain the
+signature from the subclass.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-compile-on-jit_005ffunction"></a>Method on jit_function: <em>int</em> <strong>compile</strong><em> ()</em></dt>
+<dd><p>Compile this function explicity.  You normally don&rsquo;t need to use this
+method because the function will be compiled on-demand.  If you do
+choose to build the function manually, then the correct sequence of
+operations is as follows:
+</p>
+<ol>
+<li>
+Invoke the <code>build_start</code> method to lock down the function builder.
+
+</li><li>
+Build the function by calling the value-related and instruction-related
+methods within <code>jit_function</code>.
+
+</li><li>
+Compile the function with the <code>compile</code> method.
+
+</li><li>
+Unlock the function builder by invoking <code>build_end</code>.
+</li></ol>
+</dd></dl>
+
+<dl>
+<dt><a name="index-is_005fcompiled-on-jit_005ffunction"></a>Method on jit_function: <em>int</em> <strong>is_compiled</strong><em> () const</em></dt>
+<dd><p>Determine if this function has already been compiled.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-set_005foptimization_005flevel-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>set_optimization_level</strong><em> (unsigned int <var>level</var>)</em></dt>
+<dt><a name="index-optimization_005flevel-on-jit_005ffunction"></a>Method on jit_function: <em>unsigned int</em> <strong>optimization_level</strong><em> () const</em></dt>
+<dd><p>Set or get the optimization level for this function.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-max_005foptimization_005flevel-on-jit_005ffunction"></a>Method on jit_function: <em>static unsigned int</em> <strong>max_optimization_level</strong><em> ()</em></dt>
+<dd><p>Get the maximum optimization level for <code>libjit</code>.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-closure-on-jit_005ffunction"></a>Method on jit_function: <em>void *</em> <strong>closure</strong><em> () const</em></dt>
+<dt><a name="index-vtable_005fpointer-on-jit_005ffunction"></a>Method on jit_function: <em>void *</em> <strong>vtable_pointer</strong><em> () const</em></dt>
+<dd><p>Get the closure or vtable pointer form of this function.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-apply-on-jit_005ffunction"></a>Method on jit_function: <em>int</em> <strong>apply</strong><em> (void** <var>args</var>, void* <var>result</var>)</em></dt>
+<dt><a name="index-apply-on-jit_005ffunction-1"></a>Method on jit_function: <em>int</em> <strong>apply</strong><em> (jit_type_t <var>signature</var>, void** <var>args</var>, void* <var>return_area</var>)</em></dt>
+<dd><p>Call this function, applying the specified arguments.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-signature_005fhelper-on-jit_005ffunction"></a>Method on jit_function: <em>static jit_type_t</em> <strong>signature_helper</strong><em> (jit_type_t <var>return_type</var>, ...)</em></dt>
+<dd><p>You can call this method from <code>create_signature()</code> to help build the
+correct signature for your function.  The first parameter is the return
+type, following by zero or more types for the parameters.  The parameter
+list is terminated with the special value <code>jit_function::end_params</code>.
+</p>
+<p>A maximum of 32 parameter types can be supplied, and the signature
+ABI is always set to <code>jit_abi_cdecl</code>.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-build-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>build</strong><em> ()</em></dt>
+<dd><p>This method is called when the function has to be build on-demand,
+or in response to an explicit <code>recompile</code> request.  You build the
+function by calling the value-related and instruction-related
+methods within <code>jit_function</code> that are described below.
+</p>
+<p>The default implementation of <code>build</code> will fail, so you must
+override it if you didn&rsquo;t build the function manually and call
+<code>compile</code>.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-create_005fsignature-on-jit_005ffunction"></a>Method on jit_function: <em>jit_type_t</em> <strong>create_signature</strong><em> ()</em></dt>
+<dd><p>This method is called by <code>create()</code> to create the function&rsquo;s
+signature.  The default implementation creates a signature that
+returns <code>void</code> and has no parameters.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-fail-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>fail</strong><em> ()</em></dt>
+<dd><p>This method can be called by <code>build</code> to fail the on-demand
+compilation process.  It throws an exception to unwind the build.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-out_005fof_005fmemory-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>out_of_memory</strong><em> ()</em></dt>
+<dd><p>This method can be called by <code>build</code> to indicate that the on-demand
+compilation process ran out of memory.  It throws an exception to
+unwind the build.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-build_005fstart-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>build_start</strong><em> ()</em></dt>
+<dd><p>Start an explicit build process.  Not needed if you will be using
+on-demand compilation.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-build_005fend-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>build_end</strong><em> ()</em></dt>
+<dd><p>End an explicit build process.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-new_005fvalue-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>new_value</strong><em> (jit_type_t <var>type</var>)</em></dt>
+<dd><p>Create a new temporary value.  This is the C++ counterpart to
+<code>jit_value_create</code>.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-new_005fconstant-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>new_constant</strong><em> (jit_sbyte <var>value</var>, jit_type_t <var>type</var>)</em></dt>
+<dt><a name="index-new_005fconstant-on-jit_005ffunction-1"></a>Method on jit_function: <em>jit_value</em> <strong>new_constant</strong><em> (jit_ubyte <var>value</var>, jit_type_t <var>type</var>)</em></dt>
+<dt><a name="index-new_005fconstant-on-jit_005ffunction-2"></a>Method on jit_function: <em>jit_value</em> <strong>new_constant</strong><em> (jit_short <var>value</var>, jit_type_t <var>type</var>)</em></dt>
+<dt><a name="index-new_005fconstant-on-jit_005ffunction-3"></a>Method on jit_function: <em>jit_value</em> <strong>new_constant</strong><em> (jit_ushort <var>value</var>, jit_type_t <var>type</var>)</em></dt>
+<dt><a name="index-new_005fconstant-on-jit_005ffunction-4"></a>Method on jit_function: <em>jit_value</em> <strong>new_constant</strong><em> (jit_int <var>value</var>, jit_type_t <var>type</var>)</em></dt>
+<dt><a name="index-new_005fconstant-on-jit_005ffunction-5"></a>Method on jit_function: <em>jit_value</em> <strong>new_constant</strong><em> (jit_uint <var>value</var>, jit_type_t <var>type</var>)</em></dt>
+<dt><a name="index-new_005fconstant-on-jit_005ffunction-6"></a>Method on jit_function: <em>jit_value</em> <strong>new_constant</strong><em> (jit_long <var>value</var>, jit_type_t <var>type</var>)</em></dt>
+<dt><a name="index-new_005fconstant-on-jit_005ffunction-7"></a>Method on jit_function: <em>jit_value</em> <strong>new_constant</strong><em> (jit_ulong <var>value</var>, jit_type_t <var>type</var>)</em></dt>
+<dt><a name="index-new_005fconstant-on-jit_005ffunction-8"></a>Method on jit_function: <em>jit_value</em> <strong>new_constant</strong><em> (jit_float32 <var>value</var>, jit_type_t <var>type</var>)</em></dt>
+<dt><a name="index-new_005fconstant-on-jit_005ffunction-9"></a>Method on jit_function: <em>jit_value</em> <strong>new_constant</strong><em> (jit_float64 <var>value</var>, jit_type_t <var>type</var>)</em></dt>
+<dt><a name="index-new_005fconstant-on-jit_005ffunction-10"></a>Method on jit_function: <em>jit_value</em> <strong>new_constant</strong><em> (jit_nfloat <var>value</var>, jit_type_t <var>type</var>)</em></dt>
+<dt><a name="index-new_005fconstant-on-jit_005ffunction-11"></a>Method on jit_function: <em>jit_value</em> <strong>new_constant</strong><em> (void* <var>value</var>, jit_type_t <var>type</var>)</em></dt>
+<dt><a name="index-new_005fconstant-on-jit_005ffunction-12"></a>Method on jit_function: <em>jit_value</em> <strong>new_constant</strong><em> (const jit_constant_t&amp; <var>value</var>)</em></dt>
+<dd><p>Create constant values of various kinds.  See section <a href="libjit_7.html#Values">Working with temporary values in the JIT</a>, for more
+information on creating and managing constants.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-get_005fparam-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>get_param</strong><em> (unsigned int <var>param</var>)</em></dt>
+<dd><p>Get the value that corresponds to parameter <var>param</var>.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-get_005fstruct_005fpointer-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>get_struct_pointer</strong><em> ()</em></dt>
+<dd><p>Get the value that corresponds to the structure pointer parameter,
+if this function has one.  Returns an empty value if it does not.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-new_005flabel-on-jit_005ffunction"></a>Method on jit_function: <em>jit_label</em> <strong>new_label</strong><em> ()</em></dt>
+<dd><p>Create a new label.  This is the C++ counterpart to
+<code>jit_function_reserve_label</code>.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-insn_005flabel-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_label</strong><em> (jit_label&amp; <var>label</var>)</em></dt>
+<dt><a name="index-insn_005fnew_005fblock-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_new_block</strong><em> ()</em></dt>
+<dt><a name="index-insn_005fload-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_load</strong><em> (const jit_value&amp; <var>value</var>)</em></dt>
+<dt><a name="index-insn_005fdup-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_dup</strong><em> (const jit_value&amp; <var>value</var>)</em></dt>
+<dt><a name="index-insn_005fload_005fsmall-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_load_small</strong><em> (const jit_value&amp; <var>value</var>)</em></dt>
+<dt><a name="index-store-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>store</strong><em> (const jit_value&amp; <var>dest</var>, const jit_value&amp; <var>value</var>)</em></dt>
+<dt><a name="index-insn_005fload_005frelative-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_load_relative</strong><em> (const jit_value&amp; <var>value</var>, jit_nint <var>offset</var>, jit_type_t <var>type</var>)</em></dt>
+<dt><a name="index-insn_005fstore_005frelative-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_store_relative</strong><em> (const jit_value&amp; <var>dest</var>, jit_nint <var>offset</var>, const jit_value&amp; <var>value</var>)</em></dt>
+<dt><a name="index-insn_005fadd_005frelative-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_add_relative</strong><em> (const jit_value&amp; <var>value</var>, jit_nint <var>offset</var>)</em></dt>
+<dt><a name="index-insn_005fload_005felem-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_load_elem</strong><em> (const jit_value&amp; <var>base_addr</var>, const jit_value&amp; <var>index</var>, jit_type_t <var>elem_type</var>)</em></dt>
+<dt><a name="index-insn_005fload_005felem_005faddress-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_load_elem_address</strong><em> (const jit_value&amp; <var>base_addr</var>, const jit_value&amp; <var>index</var>, jit_type_t <var>elem_type</var>)</em></dt>
+<dt><a name="index-insn_005fstore_005felem-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_store_elem</strong><em> (const jit_value&amp; <var>base_addr</var>, const jit_value&amp; <var>index</var>, const jit_value&amp; <var>value</var>)</em></dt>
+<dt><a name="index-insn_005fcheck_005fnull-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_check_null</strong><em> (const jit_value&amp; <var>value</var>)</em></dt>
+<dt><a name="index-insn_005fadd-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_add</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fadd_005fovf-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_add_ovf</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fsub-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_sub</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fsub_005fovf-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_sub_ovf</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fmul-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_mul</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fmul_005fovf-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_mul_ovf</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fdiv-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_div</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005frem-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_rem</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005frem_005fieee-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_rem_ieee</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fneg-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_neg</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fand-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_and</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005for-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_or</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fxor-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_xor</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fnot-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_not</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fshl-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_shl</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fshr-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_shr</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fushr-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_ushr</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fsshr-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_sshr</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005feq-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_eq</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fne-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_ne</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005flt-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_lt</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fle-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_le</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fgt-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_gt</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fge-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_ge</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fcmpl-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_cmpl</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fcmpg-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_cmpg</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fto_005fbool-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_to_bool</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fto_005fnot_005fbool-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_to_not_bool</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005facos-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_acos</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fasin-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_asin</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fatan-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_atan</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fatan2-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_atan2</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fceil-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_ceil</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fcos-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_cos</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fcosh-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_cosh</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fexp-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_exp</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005ffloor-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_floor</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005flog-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_log</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005flog10-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_log10</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fpow-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_pow</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005frint-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_rint</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fround-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_round</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fsin-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_sin</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fsinh-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_sinh</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fsqrt-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_sqrt</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005ftan-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_tan</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005ftanh-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_tanh</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005ftrunc-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_trunc</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fis_005fnan-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_is_nan</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fis_005ffinite-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_is_finite</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fis_005finf-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_is_inf</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fabs-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_abs</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fmin-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_min</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fmax-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_max</strong><em> (const jit_value&amp; <var>value1</var>, const jit_value&amp; <var>value2</var>)</em></dt>
+<dt><a name="index-insn_005fsign-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_sign</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005fbranch-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_branch</strong><em> (jit_label&amp; <var>label</var>)</em></dt>
+<dt><a name="index-insn_005fbranch_005fif-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_branch_if</strong><em> (const jit_value&amp; <var>value</var>, jit_label&amp; <var>label</var>)</em></dt>
+<dt><a name="index-insn_005fbranch_005fif_005fnot-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_branch_if_not</strong><em> (const jit_value&amp; value, jit_label&amp; <var>label</var>)</em></dt>
+<dt><a name="index-insn_005faddress_005fof-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_address_of</strong><em> (const jit_value&amp; <var>value1</var>)</em></dt>
+<dt><a name="index-insn_005faddress_005fof_005flabel-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_address_of_label</strong><em> (jit_label&amp; <var>label</var>)</em></dt>
+<dt><a name="index-insn_005fconvert-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_convert</strong><em> (const jit_value&amp; <var>value</var>, jit_type_t <var>type</var>, int <var>overflow_check</var>)</em></dt>
+<dt><a name="index-insn_005fcall-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_call</strong><em> (const char* <var>name</var>, jit_function_t <var>jit_func</var>, jit_type_t <var>signature</var>, jit_value_t* <var>args</var>, unsigned int <var>num_args</var>, int <var>flags</var>)</em></dt>
+<dt><a name="index-insn_005fcall_005findirect-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_call_indirect</strong><em> (const jit_value&amp; <var>value</var>, jit_type_t <var>signature</var>, jit_value_t* <var>args</var>, unsigned int <var>num_args</var>, int <var>flags</var>)</em></dt>
+<dt><a name="index-insn_005fcall_005findirect_005fvtable-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_call_indirect_vtable</strong><em> (const jit_value&amp; <var>value</var>, jit_type_t <var>signature</var>, jit_value_t * <var>args</var>, unsigned int <var>num_args</var>, int <var>flags</var>)</em></dt>
+<dt><a name="index-insn_005fcall_005fnative-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_call_native</strong><em> (const char* <var>name</var>, void* <var>native_func</var>, jit_type_t <var>signature</var>, jit_value_t* <var>args</var>, unsigned int <var>num_args</var>, int <var>flags</var>)</em></dt>
+<dt><a name="index-insn_005fcall_005fintrinsic-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_call_intrinsic</strong><em> (const char* <var>name</var>, void* <var>intrinsic_func</var>, const jit_intrinsic_descr_t&amp; <var>descriptor</var>, const jit_value&amp; <var>arg1</var>, const jit_value&amp; <var>arg2</var>)</em></dt>
+<dt><a name="index-insn_005fincoming_005freg-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_incoming_reg</strong><em> (const jit_value&amp; <var>value</var>, int <var>reg</var>)</em></dt>
+<dt><a name="index-insn_005fincoming_005fframe_005fposn-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_incoming_frame_posn</strong><em> (const jit_value&amp; <var>value</var>, jit_nint <var>posn</var>)</em></dt>
+<dt><a name="index-insn_005foutgoing_005freg-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_outgoing_reg</strong><em> (const jit_value&amp; <var>value</var>, int <var>reg</var>)</em></dt>
+<dt><a name="index-insn_005foutgoing_005fframe_005fposn-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_outgoing_frame_posn</strong><em> (const jit_value&amp; <var>value</var>, jit_nint <var>posn</var>)</em></dt>
+<dt><a name="index-insn_005freturn_005freg-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_return_reg</strong><em> (const jit_value&amp; <var>value</var>, int <var>reg</var>)</em></dt>
+<dt><a name="index-insn_005fsetup_005ffor_005fnested-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_setup_for_nested</strong><em> (int <var>nested_level</var>, int <var>reg</var>)</em></dt>
+<dt><a name="index-insn_005fflush_005fstruct-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_flush_struct</strong><em> (const jit_value&amp; <var>value</var>)</em></dt>
+<dt><a name="index-insn_005fimport-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_import</strong><em> (jit_value <var>value</var>)</em></dt>
+<dt><a name="index-insn_005fpush-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_push</strong><em> (const jit_value&amp; <var>value</var>)</em></dt>
+<dt><a name="index-insn_005fpush_005fptr-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_push_ptr</strong><em> (const jit_value&amp; <var>value</var>, jit_type_t <var>type</var>)</em></dt>
+<dt><a name="index-insn_005fset_005fparam-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_set_param</strong><em> (const jit_value&amp; <var>value</var>, jit_nint <var>offset</var>)</em></dt>
+<dt><a name="index-insn_005fset_005fparam_005fptr-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_set_param_ptr</strong><em> (const jit_value&amp; <var>value</var>, jit_type_t <var>type</var>, jit_nint <var>offset</var>)</em></dt>
+<dt><a name="index-insn_005fpush_005freturn_005farea_005fptr-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_push_return_area_ptr</strong><em> ()</em></dt>
+<dt><a name="index-insn_005freturn-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_return</strong><em> (const jit_value&amp; <var>value</var>)</em></dt>
+<dt><a name="index-insn_005freturn-on-jit_005ffunction-1"></a>Method on jit_function: <em>void</em> <strong>insn_return</strong><em> ()</em></dt>
+<dt><a name="index-insn_005freturn_005fptr-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_return_ptr</strong><em> (const jit_value&amp; <var>value</var>, jit_type_t <var>type</var>)</em></dt>
+<dt><a name="index-insn_005fdefault_005freturn-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_default_return</strong><em> ()</em></dt>
+<dt><a name="index-insn_005fthrow-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_throw</strong><em> (const jit_value&amp; <var>value</var>)</em></dt>
+<dt><a name="index-insn_005fget_005fcall_005fstack-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_get_call_stack</strong><em> ()</em></dt>
+<dt><a name="index-insn_005fthrown_005fexception-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_thrown_exception</strong><em> ()</em></dt>
+<dt><a name="index-insn_005fuses_005fcatcher-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_uses_catcher</strong><em> ()</em></dt>
+<dt><a name="index-insn_005fstart_005fcatcher-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_start_catcher</strong><em> ()</em></dt>
+<dt><a name="index-insn_005fbranch_005fif_005fpc_005fnot_005fin_005frange-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_branch_if_pc_not_in_range</strong><em> (const jit_label&amp; <var>start_label</var>, const jit_label&amp; <var>end_label</var>, jit_label&amp; <var>label</var>)</em></dt>
+<dt><a name="index-insn_005frethrow_005funhandled-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_rethrow_unhandled</strong><em> ()</em></dt>
+<dt><a name="index-insn_005fstart_005ffinally-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_start_finally</strong><em> (jit_label&amp; <var>label</var>)</em></dt>
+<dt><a name="index-insn_005freturn_005ffrom_005ffinally-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_return_from_finally</strong><em> ()</em></dt>
+<dt><a name="index-insn_005fcall_005ffinally-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_call_finally</strong><em> (jit_label&amp; <var>label</var>)</em></dt>
+<dt><a name="index-insn_005fstart_005ffilter-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_start_filter</strong><em> (jit_label&amp; <var>label</var>, jit_type_t <var>type</var>)</em></dt>
+<dt><a name="index-insn_005freturn_005ffrom_005ffilter-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_return_from_filter</strong><em> (const jit_value&amp; <var>value</var>)</em></dt>
+<dt><a name="index-insn_005fcall_005ffilter-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>insn_call_filter</strong><em> (jit_label&amp; <var>label</var>, const jit_value&amp; <var>value</var>, jit_type_t <var>type</var>)</em></dt>
+<dt><a name="index-insn_005fmemcpy-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_memcpy</strong><em> (const jit_value&amp; <var>dest</var>, const jit_value&amp; <var>src</var>, const jit_value&amp; <var>size</var>)</em></dt>
+<dt><a name="index-insn_005fmemmove-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_memmove</strong><em> (const jit_value&amp; <var>dest</var>, const jit_value&amp; <var>src</var>, const jit_value&amp; <var>size</var>)</em></dt>
+<dt><a name="index-jit_005finsn_005fmemset-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>jit_insn_memset</strong><em> (const jit_value&amp; <var>dest</var>, const jit_value&amp; <var>value</var>, const jit_value&amp; <var>size</var>)</em></dt>
+<dt><a name="index-jit_005finsn_005falloca-on-jit_005ffunction"></a>Method on jit_function: <em>jit_value</em> <strong>jit_insn_alloca</strong><em> (const jit_value&amp; <var>size</var>)</em></dt>
+<dt><a name="index-insn_005fmove_005fblocks_005fto_005fend-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_move_blocks_to_end</strong><em> (const jit_label&amp; <var>from_label</var>, const jit_label&amp; <var>to_label</var>)</em></dt>
+<dt><a name="index-insn_005fmove_005fblocks_005fto_005fstart-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_move_blocks_to_start</strong><em> (const jit_label&amp; <var>from_label</var>, const jit_label&amp; <var>to_label</var>)</em></dt>
+<dt><a name="index-insn_005fmark_005foffset-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_mark_offset</strong><em> (jit_int <var>offset</var>)</em></dt>
+<dt><a name="index-insn_005fmark_005fbreakpoint-on-jit_005ffunction"></a>Method on jit_function: <em>void</em> <strong>insn_mark_breakpoint</strong><em> (jit_nint <var>data1</var>, jit_nint <var>data2</var>)</em></dt>
+<dd><p>Create instructions of various kinds.  See section <a href="libjit_8.html#Instructions">Working with instructions in the JIT</a>, for more
+information on the individual instructions and their arguments.
+</p></dd></dl>
+
+
+
+<hr>
+<table class="header" cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="libjit_18.html#C_002b_002b-Values" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_20.html#Porting" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="libjit.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_21.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated on <i>April 29, 2015</i> using <a href="http://www.nongnu.org/texi2html/"><i>texi2html 5.0</i></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>

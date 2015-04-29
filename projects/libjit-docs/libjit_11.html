@@ -1,0 +1,278 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- Created on April 29, 2015 by texi2html 5.0
+texi2html was written by: 
+            Lionel Cons <Lionel.Cons@cern.ch> (original author)
+            Karl Berry  <karl@freefriends.org>
+            Olaf Bachmann <obachman@mathematik.uni-kl.de>
+            and many others.
+Maintained by: Many creative people.
+Send bugs and suggestions to <texi2html-bug@nongnu.org>
+-->
+<head>
+<title>Just-In-Time Compiler Library: 11 Handling exceptions</title>
+
+<meta name="description" content="Just-In-Time Compiler Library: 11 Handling exceptions">
+<meta name="keywords" content="Just-In-Time Compiler Library: 11 Handling exceptions">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2html 5.0">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.smallquotation {font-size: smaller}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+div.smalldisplay {margin-left: 3.2em}
+div.smallexample {margin-left: 3.2em}
+div.smalllisp {margin-left: 3.2em}
+pre.display {font-family: serif}
+pre.format {font-family: serif}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+pre.smalldisplay {font-family: serif; font-size: smaller}
+pre.smallexample {font-size: smaller}
+pre.smallformat {font-family: serif; font-size: smaller}
+pre.smalllisp {font-size: smaller}
+span.nocodebreak {white-space:pre}
+span.nolinebreak {white-space:pre}
+span.roman {font-family:serif; font-weight:normal}
+span.sansserif {font-family:sans-serif; font-weight:normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+
+
+</head>
+
+<body lang="en" bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink="#800080" alink="#FF0000">
+
+<a name="Exceptions"></a>
+<table class="header" cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="libjit_10.html#Intrinsics" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_10.html#Intrinsics" title="Previous section in reading order"> &lt; </a>]</td>
+<td valign="middle" align="left">[ Up ]</td>
+<td valign="middle" align="left">[<a href="libjit_12.html#Breakpoint-Debugging" title="Next section in reading order"> &gt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_12.html#Breakpoint-Debugging" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="libjit.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_21.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<a name="Handling-exceptions"></a>
+<h1 class="chapter">11 Handling exceptions</h1>
+<a name="index-Handling-exceptions"></a>
+
+
+
+
+<a name="index-jit_002dexcept_002eh"></a>
+
+
+<dl>
+<dt><a name="index-jit_005fexception_005fget_005flast"></a>Function: <em>void *</em> <strong>jit_exception_get_last</strong><em> (void)</em></dt>
+<dd><p>Get the last exception object that occurred on this thread, or NULL
+if there is no exception object on this thread.  As far as <code>libjit</code>
+is concerned, an exception is just a pointer.  The precise meaning of the
+data at the pointer is determined by the front end.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fexception_005fget_005flast_005fand_005fclear"></a>Function: <em>void *</em> <strong>jit_exception_get_last_and_clear</strong><em> (void)</em></dt>
+<dd><p>Get the last exception object that occurred on this thread and also
+clear the exception state to NULL.  This combines the effect of
+both <code>jit_exception_get_last</code> and <code>jit_exception_clear_last</code>.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fexception_005fset_005flast"></a>Function: <em>void</em> <strong>jit_exception_set_last</strong><em> (void *<var>object</var>)</em></dt>
+<dd><p>Set the last exception object that occurred on this thread, so that
+it can be retrieved by a later call to <code>jit_exception_get_last</code>.
+This is normally used by <code>jit_function_apply</code> to save the
+exception object before returning to regular code.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fexception_005fclear_005flast"></a>Function: <em>void</em> <strong>jit_exception_clear_last</strong><em> (void)</em></dt>
+<dd><p>Clear the last exception object that occurred on this thread.
+This is equivalent to calling <code>jit_exception_set_last</code>
+with a parameter of NULL.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fexception_005fthrow"></a>Function: <em>void</em> <strong>jit_exception_throw</strong><em> (void *<var>object</var>)</em></dt>
+<dd><p>Throw an exception object within the current thread.  As far as
+<code>libjit</code> is concerned, the exception object is just a pointer.
+The precise meaning of the data at the pointer is determined
+by the front end.
+</p>
+<p>Note: as an exception object works its way back up the stack,
+it may be temporarily stored in memory that is not normally visible
+to a garbage collector.  The front-end is responsible for taking steps
+to &quot;pin&quot; the object so that it is uncollectable until explicitly
+copied back into a location that is visible to the collector once more.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fexception_005fbuiltin"></a>Function: <em>void</em> <strong>jit_exception_builtin</strong><em> (int <var>exception_type</var>)</em></dt>
+<dd><p>This function is called to report a builtin exception.
+The JIT will automatically embed calls to this function wherever a
+builtin exception needs to be reported.
+</p>
+<p>When a builtin exception occurs, the current thread&rsquo;s exception
+handler is called to construct an appropriate object, which is
+then thrown.
+</p>
+<p>If there is no exception handler set, or the handler returns NULL,
+then <code>libjit</code> will print an error message to stderr and cause
+the program to exit with a status of 1.  You normally don&rsquo;t want
+this behavior and you should override it if possible.
+</p>
+<p>The following builtin exception types are currently supported:
+</p>
+<dl compact="compact">
+<dd><a name="index-JIT_005fRESULT_005fOK"></a>
+</dd>
+<dt><code>JIT_RESULT_OK</code></dt>
+<dd><p>The operation was performed successfully (value is 1).
+</p>
+<a name="index-JIT_005fRESULT_005fOVERFLOW"></a>
+</dd>
+<dt><code>JIT_RESULT_OVERFLOW</code></dt>
+<dd><p>The operation resulted in an overflow exception (value is 0).
+</p>
+<a name="index-JIT_005fRESULT_005fARITHMETIC"></a>
+</dd>
+<dt><code>JIT_RESULT_ARITHMETIC</code></dt>
+<dd><p>The operation resulted in an arithmetic exception.  i.e. an attempt was
+made to divide the minimum integer value by -1 (value is -1).
+</p>
+<a name="index-JIT_005fRESULT_005fDIVISION_005fBY_005fZERO"></a>
+</dd>
+<dt><code>JIT_RESULT_DIVISION_BY_ZERO</code></dt>
+<dd><p>The operation resulted in a division by zero exception (value is -2).
+</p>
+<a name="index-JIT_005fRESULT_005fCOMPILE_005fERROR"></a>
+</dd>
+<dt><code>JIT_RESULT_COMPILE_ERROR</code></dt>
+<dd><p>An error occurred when attempting to dynamically compile a function
+(value is -3).
+</p>
+<a name="index-JIT_005fRESULT_005fOUT_005fOF_005fMEMORY"></a>
+</dd>
+<dt><code>JIT_RESULT_OUT_OF_MEMORY</code></dt>
+<dd><p>The system ran out of memory while performing an operation (value is -4).
+</p>
+<a name="index-JIT_005fRESULT_005fNULL_005fREFERENCE"></a>
+</dd>
+<dt><code>JIT_RESULT_NULL_REFERENCE</code></dt>
+<dd><p>An attempt was made to dereference a NULL pointer (value is -5).
+</p>
+<a name="index-JIT_005fRESULT_005fNULL_005fFUNCTION"></a>
+</dd>
+<dt><code>JIT_RESULT_NULL_FUNCTION</code></dt>
+<dd><p>An attempt was made to call a function with a NULL function pointer
+(value is -6).
+</p>
+<a name="index-JIT_005fRESULT_005fCALLED_005fNESTED"></a>
+</dd>
+<dt><code>JIT_RESULT_CALLED_NESTED</code></dt>
+<dd><p>An attempt was made to call a nested function from a non-nested context
+(value is -7).
+</p>
+<a name="index-JIT_005fRESULT_005fOUT_005fOF_005fBOUNDS"></a>
+</dd>
+<dt><code>JIT_RESULT_OUT_OF_BOUNDS</code></dt>
+<dd><p>The operation resulted in an out of bounds array access (value is -8).
+</p>
+<a name="index-JIT_005fRESULT_005fUNDEFINED_005fLABEL"></a>
+</dd>
+<dt><code>JIT_RESULT_UNDEFINED_LABEL</code></dt>
+<dd><p>A branch operation used a label that was not defined anywhere in the
+function (value is -9).
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fexception_005fset_005fhandler"></a>Function: <em>jit_exception_func</em> <strong>jit_exception_set_handler</strong><em> (jit_exception_func <var>handler</var>)</em></dt>
+<dd><p>Set the builtin exception handler for the current thread.
+Returns the previous exception handler.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fexception_005fget_005fhandler"></a>Function: <em>jit_exception_func</em> <strong>jit_exception_get_handler</strong><em> (void)</em></dt>
+<dd><p>Get the builtin exception handler for the current thread.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fexception_005fget_005fstack_005ftrace"></a>Function: <em>jit_stack_trace_t</em> <strong>jit_exception_get_stack_trace</strong><em> (void)</em></dt>
+<dd><p>Create an object that represents the current call stack.
+This is normally used to indicate the location of an exception.
+Returns NULL if a stack trace is not available, or there is
+insufficient memory to create it.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fstack_005ftrace_005fget_005fsize"></a>Function: <em>unsigned int</em> <strong>jit_stack_trace_get_size</strong><em> (jit_stack_trace_t <var>trace</var>)</em></dt>
+<dd><p>Get the size of a stack trace.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fstack_005ftrace_005fget_005ffunction"></a>Function: <em>jit_function_t</em> <strong>jit_stack_trace_get_function</strong><em> (jit_context_t <var>context</var>, jit_stack_trace_t <var>trace</var>, unsigned int <var>posn</var>)</em></dt>
+<dd><p>Get the function that is at position <var>posn</var> within a stack trace.
+Position 0 is the function that created the stack trace.  If this
+returns NULL, then it indicates that there is a native callout at
+<var>posn</var> within the stack trace.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fstack_005ftrace_005fget_005fpc"></a>Function: <em>void *</em> <strong>jit_stack_trace_get_pc</strong><em> (jit_stack_trace_t <var>trace</var>, unsigned int <var>posn</var>)</em></dt>
+<dd><p>Get the program counter that corresponds to position <var>posn</var>
+within a stack trace.  This is the point within the function
+where execution had reached at the time of the trace.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fstack_005ftrace_005fget_005foffset"></a>Function: <em>unsigned int</em> <strong>jit_stack_trace_get_offset</strong><em> (jit_stack_trace_t <var>trace</var>, unsigned int <var>posn</var>)</em></dt>
+<dd><p>Get the bytecode offset that is recorded for position <var>posn</var>
+within a stack trace.  This will be <code>JIT_NO_OFFSET</code> if there
+is no bytecode offset associated with <var>posn</var>.
+</p></dd></dl>
+
+<dl>
+<dt><a name="index-jit_005fstack_005ftrace_005ffree"></a>Function: <em>void</em> <strong>jit_stack_trace_free</strong><em> (jit_stack_trace_t <var>trace</var>)</em></dt>
+<dd><p>Free the memory associated with a stack trace.
+</p></dd></dl>
+
+
+
+<hr>
+<table class="header" cellpadding="1" cellspacing="1" border="0">
+<tr><td valign="middle" align="left">[<a href="libjit_10.html#Intrinsics" title="Beginning of this chapter or previous chapter"> &lt;&lt; </a>]</td>
+<td valign="middle" align="left">[<a href="libjit_12.html#Breakpoint-Debugging" title="Next chapter"> &gt;&gt; </a>]</td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left"> &nbsp; </td>
+<td valign="middle" align="left">[<a href="libjit.html#Introduction" title="Cover (top) of document">Top</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_toc.html#SEC_Contents" title="Table of contents">Contents</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_21.html#Index" title="Index">Index</a>]</td>
+<td valign="middle" align="left">[<a href="libjit_abt.html#SEC_About" title="About (help)"> ? </a>]</td>
+</tr></table>
+<p>
+ <font size="-1">
+  This document was generated on <i>April 29, 2015</i> using <a href="http://www.nongnu.org/texi2html/"><i>texi2html 5.0</i></a>.
+ </font>
+ <br>
+
+</p>
+</body>
+</html>
